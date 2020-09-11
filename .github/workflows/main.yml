@@ -1,0 +1,33 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+    lint:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - uses: actions/setup-go@v2
+          - name: Check that 'gofmt' has been run
+            run: test -z $(gofmt -l .)
+    test:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - uses: actions/setup-go@v2
+          - name: Run 'go install'
+            run: go install ./cmd/gogenlicense
+          - name: Run 'go generate'
+            run: go generate
+    build:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - uses: actions/setup-go@v2
+          - name: Build executables
+            run: go build ./cmd/gogenlicense
+          - name: Upload executables
+            uses: actions/upload-artifact@v2
+            with:
+              name: Binaries
+              path: gogenlicense
