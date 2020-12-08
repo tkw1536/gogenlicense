@@ -116,7 +116,7 @@ type noticeContext tplContext
 // templateFunctions are functions used during templating
 var templateFunctions = template.FuncMap{
 	"fdate": func(t time.Time, layout string) (string, error) {
-		return t.Format(layout), nil
+		return t.UTC().Format(layout), nil
 	},
 
 	// prefix adds a prefix to every line of a string.
