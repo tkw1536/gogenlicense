@@ -16,4 +16,12 @@ It is intended to be used by means of the [`go generate`](https://golang.org/pkg
 
 For a concrete example of this, see the 'legal' subpackage, as it actually implements this. 
 
-This package mainly relies on the execellent https://github.com/google/go-licenses package. 
+This package mainly relies on the excellent https://github.com/google/go-licenses package. 
+
+## Changelog
+
+### Version 1.0.1 (Upcoming)
+
+### Version 1.0.0 (Released [Dec 8 2020](https://github.com/tkw1536/gogenlicense/releases/tag/v1.0.0))
+
+- Initial release
