@@ -20,7 +20,9 @@ This package mainly relies on the excellent https://github.com/google/go-license
 
 ## Changelog
 
-### Version 1.0.1 (Upcoming)
+## Version 1.1.1 (Upcoming)
+
+### Version 1.1.0 (Released [Feb 21 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.1.0))
 
 - Bugfix: Do not include modules with '.go' in the license file name
 
