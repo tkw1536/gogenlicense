@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/google/go-licenses/licenses"
 	"github.com/pkg/errors"
@@ -39,17 +40,18 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 	libraries := make([]Library, 0, len(libs))
 
-outer:
 	for _, lib := range libs {
 		name := lib.Name()
 
-		// if we don't include the roots then we need to continue
-		if !options.IncludeRoots {
-			for _, m := range options.ModulePaths {
-				if m == name {
-					continue outer
-				}
-			}
+		// do not include the 'root' paths inside the output
+		if !options.IncludeRoots && contains(name, options.ModulePaths) {
+			continue
+		}
+
+		// do not include anything where the license file is a .go file.
+		// That's a potential bug in "github.com/google/go-licenses/licenses".
+		if strings.EqualFold(filepath.Ext(lib.LicensePath), ".go") {
+			continue
 		}
 
 		licenseName, _, err := classifier.Identify(lib.LicensePath)
@@ -74,6 +76,15 @@ outer:
 	})
 
 	return append([]Library{goStandardLibrary}, libraries...), nil
+}
+
+func contains(needle string, haystack []string) bool {
+	for _, hay := range haystack {
+		if hay == needle {
+			return true
+		}
+	}
+	return false
 }
 
 var libraryGitRemotes = []string{
