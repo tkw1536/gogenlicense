@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
 
@@ -16,7 +17,7 @@ import (
 )
 
 func main() {
-	result, err := gogenlicense.Format(context.Background(), gogenlicense.Options{
+	result, err := gogenlicense.Format(globalContext, gogenlicense.Options{
 		ModulePaths:         argImportPaths,
 		ConfidenceThreshold: flagConfidenceThreshold,
 
@@ -27,22 +28,27 @@ func main() {
 		glog.Fatal(err)
 	}
 
-	if flagOutFile != "" {
-		err := ioutil.WriteFile(flagOutFile, []byte(result), os.ModePerm)
-		if err != nil {
-			glog.Fatal(err)
-		}
+	if flagOutFile == "" {
+		fmt.Println(result)
 		return
 	}
 
-	fmt.Print(result)
+	err = ioutil.WriteFile(flagOutFile, []byte(result), os.ModePerm)
+	if err != nil {
+		glog.Fatal(err)
+	}
 }
+
+//
+// Arguments & Defaults
+//
 
 var argImportPaths []string
 var flagConfidenceThreshold float64
 var flagOutFile string
 var flagOutPackage string
 var flagDeclarationName string
+var flagModule bool
 
 func init() {
 	var legalFlag bool
@@ -91,6 +97,41 @@ func init() {
 	flagConfidenceThreshold = 0.9
 	flag.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
 
+	flag.BoolVar(&flagModule, "m", flagModule, "exclude the path of the nearest module (folder with a 'go.mod' file")
+	defer func() {
+		if !flagModule {
+			return
+		}
+		workdir, err := os.Getwd()
+		if err != nil {
+			glog.Fatal(err)
+		}
+		name, err := gogenlicense.FindModulePath(workdir)
+		if err != nil {
+			glog.Fatal(err)
+		}
+		argImportPaths = append(argImportPaths, name)
+	}()
+
 	flag.Parse()
-	argImportPaths = flag.Args()
+	argImportPaths = append(argImportPaths, flag.Args()...)
+}
+
+//
+// CTRL+C cancels a global context
+//
+
+var globalContext context.Context
+
+func init() {
+	var cancel context.CancelFunc
+	globalContext, cancel = context.WithCancel(context.Background())
+
+	cancelChan := make(chan os.Signal)
+	signal.Notify(cancelChan, os.Interrupt)
+
+	go func() {
+		<-cancelChan
+		cancel()
+	}()
 }
