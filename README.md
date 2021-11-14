@@ -11,7 +11,7 @@ It also generates appropriate comments for godoc.
 It is intended to be used by means of the [`go generate`](https://golang.org/pkg/cmd/go/internal/generate/) command with a comment inside the code such as:
 
 ```bash
-//go:generate gogenlicense -p legal -n Notices -d notices.go github.com/tkw1536/gogenlicense
+//go:generate gogenlicense github.com/tkw1536/gogenlicense
 ```
 
 For a concrete example of this, see the 'legal' subpackage, as it actually implements this. 
@@ -21,6 +21,8 @@ This package mainly relies on the excellent https://github.com/google/go-license
 ## Changelog
 
 ## Version 1.1.1 (Upcoming)
+
+- Use '$GOPACKAGE' and '$GOFILE' as default parameters
 
 ### Version 1.1.0 (Released [Feb 21 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.1.0))
 

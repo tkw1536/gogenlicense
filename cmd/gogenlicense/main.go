@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/golang/glog"
 	"github.com/tkw1536/gogenlicense"
@@ -15,18 +17,18 @@ import (
 
 func main() {
 	result, err := gogenlicense.Format(context.Background(), gogenlicense.Options{
-		ModulePaths:         importPaths,
-		ConfidenceThreshold: confidenceThreshold,
+		ModulePaths:         argImportPaths,
+		ConfidenceThreshold: flagConfidenceThreshold,
 
-		OutPackage:      outPackage,
-		DeclarationName: declarationName,
+		OutPackage:      flagOutPackage,
+		DeclarationName: flagDeclarationName,
 	})
 	if err != nil {
 		glog.Fatal(err)
 	}
 
-	if outFile != "" {
-		err := ioutil.WriteFile(outFile, []byte(result), os.ModePerm)
+	if flagOutFile != "" {
+		err := ioutil.WriteFile(flagOutFile, []byte(result), os.ModePerm)
 		if err != nil {
 			glog.Fatal(err)
 		}
@@ -36,15 +38,15 @@ func main() {
 	fmt.Print(result)
 }
 
-var importPaths []string
-var confidenceThreshold float64 = 0.9
-var outFile string = ""
-var outPackage string = "legal"
-var declarationName string = "Notices"
+var argImportPaths []string
+var flagConfidenceThreshold float64
+var flagOutFile string
+var flagOutPackage string
+var flagDeclarationName string
 
 func init() {
 	var legalFlag bool
-	flag.BoolVar(&legalFlag, "legal", legalFlag, "Print legal notices and exit")
+	flag.BoolVar(&legalFlag, "legal", legalFlag, "print legal notices and exit")
 	defer func() {
 		if legalFlag {
 			fmt.Println("This executable contains code from several different go packages. ")
@@ -54,10 +56,41 @@ func init() {
 		}
 	}()
 
-	flag.Float64Var(&confidenceThreshold, "t", confidenceThreshold, "Threshold for the licenseclassifier")
-	flag.StringVar(&outPackage, "p", outPackage, "Package of generated go file")
-	flag.StringVar(&declarationName, "n", declarationName, "Name of declaration to generate")
-	flag.StringVar(&outFile, "d", outFile, "File to write output to. If omitted, use STDOUT. ")
+	flag.StringVar(&flagOutPackage, "p", flagOutPackage, "name of package to generate go file for (default '$GOPACKAGE' environment variable or 'legal')")
+	defer func() {
+		if flagOutPackage != "" {
+			return
+		}
+		flagOutPackage = os.Getenv("GOPACKAGE")
+		if flagOutPackage == "" {
+			flagOutPackage = "legal"
+		}
+	}()
+
+	flag.StringVar(&flagDeclarationName, "n", flagDeclarationName, "Name of declaration to generate (default 'Notices'")
+	defer func() {
+		if flagDeclarationName != "" {
+			return
+		}
+		flagDeclarationName = "Notices"
+	}()
+
+	flag.StringVar(&flagOutFile, "d", flagOutFile, "file to write output to (default '${basename($GOFILE)}_notices.go' or 'legal.go')")
+	defer func() {
+		if flagOutFile != "" {
+			return
+		}
+		envInFile := os.Getenv("GOFILE")
+		if envInFile != "" {
+			flagOutFile = strings.TrimSuffix(envInFile, filepath.Ext(envInFile)) + "_notices.go"
+			return
+		}
+		flagOutFile = "legal.go"
+	}()
+
+	flagConfidenceThreshold = 0.9
+	flag.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
+
 	flag.Parse()
-	importPaths = flag.Args()
+	argImportPaths = flag.Args()
 }
