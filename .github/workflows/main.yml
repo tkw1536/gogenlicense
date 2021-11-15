@@ -8,6 +8,8 @@ jobs:
       steps:
           - uses: actions/checkout@v2
           - uses: actions/setup-go@v2
+            with:
+              go-version: '^1.16'
           - name: Check that 'gofmt' has been run
             run: test -z $(gofmt -l .)
     test:
@@ -15,6 +17,8 @@ jobs:
       steps:
           - uses: actions/checkout@v2
           - uses: actions/setup-go@v2
+            with:
+              go-version: '^1.16'
           - name: Run 'go install'
             run: go install ./cmd/gogenlicense
           - name: Run 'go generate'
@@ -24,6 +28,8 @@ jobs:
       steps:
           - uses: actions/checkout@v2
           - uses: actions/setup-go@v2
+            with:
+              go-version: '^1.16'
           - name: Build executables
             run: go build ./cmd/gogenlicense
           - name: Upload executables
