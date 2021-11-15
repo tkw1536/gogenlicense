@@ -25,6 +25,7 @@ This package mainly relies on the excellent https://github.com/google/go-license
 - Update go to `1.17`
 - Add an '-m' flag to automatically use the current project
 - Use '$GOPACKAGE' and '$GOFILE' as default parameters
+- various internal improvements
 
 ### Version 1.1.0 (Released [Feb 21 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.1.0))
 
