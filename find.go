@@ -59,6 +59,9 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 			return nil, errors.Wrapf(err, "Unable to identify license %q", lib.LicensePath)
 		}
 		licenseText, err := ioutil.ReadFile(lib.LicensePath)
+		if err != nil {
+			return nil, errors.Wrapf(err, "Unable to read license file %q", lib.LicensePath)
+		}
 
 		libraries = append(libraries, Library{
 			Path:  name,
