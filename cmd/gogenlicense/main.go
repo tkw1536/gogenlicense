@@ -43,6 +43,8 @@ func main() {
 // Arguments & Defaults
 //
 
+var flagset = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
 var argImportPaths []string
 var flagConfidenceThreshold float64
 var flagOutFile string
@@ -52,7 +54,7 @@ var flagModule bool
 
 func init() {
 	var legalFlag bool
-	flag.BoolVar(&legalFlag, "legal", legalFlag, "print legal notices and exit")
+	flagset.BoolVar(&legalFlag, "legal", legalFlag, "print legal notices and exit")
 	defer func() {
 		if legalFlag {
 			fmt.Println("This executable contains code from several different go packages. ")
@@ -62,7 +64,7 @@ func init() {
 		}
 	}()
 
-	flag.StringVar(&flagOutPackage, "p", flagOutPackage, "name of package to generate go file for (default '$GOPACKAGE' environment variable or 'legal')")
+	flagset.StringVar(&flagOutPackage, "p", flagOutPackage, "name of package to generate go file for (default '$GOPACKAGE' environment variable or 'legal')")
 	defer func() {
 		if flagOutPackage != "" {
 			return
@@ -73,7 +75,7 @@ func init() {
 		}
 	}()
 
-	flag.StringVar(&flagDeclarationName, "n", flagDeclarationName, "Name of declaration to generate (default 'Notices'")
+	flagset.StringVar(&flagDeclarationName, "n", flagDeclarationName, "Name of declaration to generate (default 'Notices'")
 	defer func() {
 		if flagDeclarationName != "" {
 			return
@@ -81,7 +83,7 @@ func init() {
 		flagDeclarationName = "Notices"
 	}()
 
-	flag.StringVar(&flagOutFile, "d", flagOutFile, "file to write output to (default '${basename($GOFILE)}_notices.go' or 'legal.go')")
+	flagset.StringVar(&flagOutFile, "d", flagOutFile, "file to write output to (default '${basename($GOFILE)}_notices.go' or 'legal.go')")
 	defer func() {
 		if flagOutFile != "" {
 			return
@@ -95,9 +97,9 @@ func init() {
 	}()
 
 	flagConfidenceThreshold = 0.9
-	flag.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
+	flagset.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
 
-	flag.BoolVar(&flagModule, "m", flagModule, "exclude the path of the nearest module (folder with a 'go.mod' file")
+	flagset.BoolVar(&flagModule, "m", flagModule, "exclude the path of the nearest module (folder with a 'go.mod' file")
 	defer func() {
 		if !flagModule {
 			return
@@ -113,8 +115,14 @@ func init() {
 		argImportPaths = append(argImportPaths, name)
 	}()
 
-	flag.Parse()
+	flagset.Parse(os.Args[1:])
 	argImportPaths = append(argImportPaths, flag.Args()...)
+}
+
+func init() {
+	// HACK HACK HACK
+	// we need this supress various glog warnings
+	flag.CommandLine.Parse(nil)
 }
 
 //

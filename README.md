@@ -22,6 +22,7 @@ This package mainly relies on the excellent https://github.com/google/go-license
 
 ## Version 1.2.0 (Upcoming)
 
+- Update go to `1.17`
 - Add an '-m' flag to automatically use the current project
 - Use '$GOPACKAGE' and '$GOFILE' as default parameters
 
