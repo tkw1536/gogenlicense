@@ -2,7 +2,6 @@ package gogenlicense
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -36,7 +35,7 @@ func FindModulePath(path string) (name string, err error) {
 	if err != nil {
 		return "", err
 	}
-	bytes, err := ioutil.ReadFile(gomod)
+	bytes, err := os.ReadFile(gomod)
 	if err != nil {
 		return "", err
 	}

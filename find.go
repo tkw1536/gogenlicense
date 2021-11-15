@@ -5,7 +5,7 @@ package gogenlicense
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -58,7 +58,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, "Unable to identify license %q", lib.LicensePath)
 		}
-		licenseText, err := ioutil.ReadFile(lib.LicensePath)
+		licenseText, err := os.ReadFile(lib.LicensePath)
 		if err != nil {
 			return nil, errors.Wrapf(err, "Unable to read license file %q", lib.LicensePath)
 		}
