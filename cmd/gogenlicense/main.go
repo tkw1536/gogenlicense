@@ -5,7 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -25,7 +25,7 @@ func main() {
 		DeclarationName: flagDeclarationName,
 	})
 	if err != nil {
-		glog.Fatal(err)
+		log.Fatal(err)
 	}
 
 	if flagOutFile == "" {
@@ -33,17 +33,15 @@ func main() {
 		return
 	}
 
-	err = ioutil.WriteFile(flagOutFile, []byte(result), os.ModePerm)
+	err = os.WriteFile(flagOutFile, []byte(result), os.ModePerm)
 	if err != nil {
-		glog.Fatal(err)
+		log.Fatal(err)
 	}
 }
 
 //
 // Arguments & Defaults
 //
-
-var flagset = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 
 var argImportPaths []string
 var flagConfidenceThreshold float64
@@ -53,8 +51,11 @@ var flagDeclarationName string
 var flagModule bool
 
 func init() {
+	// HACK HACK HACK: remove glog flags by re-initializing the flagset
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
 	var legalFlag bool
-	flagset.BoolVar(&legalFlag, "legal", legalFlag, "print legal notices and exit")
+	flag.BoolVar(&legalFlag, "legal", legalFlag, "print legal notices and exit")
 	defer func() {
 		if legalFlag {
 			fmt.Println("This executable contains code from several different go packages. ")
@@ -64,7 +65,7 @@ func init() {
 		}
 	}()
 
-	flagset.StringVar(&flagOutPackage, "p", flagOutPackage, "name of package to generate go file for (default '$GOPACKAGE' environment variable or 'legal')")
+	flag.StringVar(&flagOutPackage, "p", flagOutPackage, "name of package to generate go file for (default '$GOPACKAGE' environment variable or 'legal')")
 	defer func() {
 		if flagOutPackage != "" {
 			return
@@ -75,7 +76,7 @@ func init() {
 		}
 	}()
 
-	flagset.StringVar(&flagDeclarationName, "n", flagDeclarationName, "Name of declaration to generate (default 'Notices'")
+	flag.StringVar(&flagDeclarationName, "n", flagDeclarationName, "Name of declaration to generate (default 'Notices'")
 	defer func() {
 		if flagDeclarationName != "" {
 			return
@@ -83,7 +84,7 @@ func init() {
 		flagDeclarationName = "Notices"
 	}()
 
-	flagset.StringVar(&flagOutFile, "d", flagOutFile, "file to write output to (default '${basename($GOFILE)}_notices.go' or 'legal.go')")
+	flag.StringVar(&flagOutFile, "d", flagOutFile, "file to write output to (default '${basename($GOFILE)}_notices.go' or 'legal.go')")
 	defer func() {
 		if flagOutFile != "" {
 			return
@@ -97,9 +98,9 @@ func init() {
 	}()
 
 	flagConfidenceThreshold = 0.9
-	flagset.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
+	flag.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
 
-	flagset.BoolVar(&flagModule, "m", flagModule, "exclude the path of the nearest module (folder with a 'go.mod' file")
+	flag.BoolVar(&flagModule, "m", flagModule, "exclude the path of the nearest module (folder with a 'go.mod' file")
 	defer func() {
 		if !flagModule {
 			return
@@ -115,14 +116,8 @@ func init() {
 		argImportPaths = append(argImportPaths, name)
 	}()
 
-	flagset.Parse(os.Args[1:])
+	flag.Parse()
 	argImportPaths = append(argImportPaths, flag.Args()...)
-}
-
-func init() {
-	// HACK HACK HACK
-	// we need this supress various glog warnings
-	flag.CommandLine.Parse(nil)
 }
 
 //
