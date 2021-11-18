@@ -1,6 +1,11 @@
 package gogenlicense
 
-import "context"
+import (
+	"context"
+	"go/format"
+
+	"github.com/pkg/errors"
+)
 
 // Options are options for the Format function.
 type Options struct {
@@ -22,15 +27,46 @@ type Options struct {
 	DeclarationName string
 }
 
-// Format formats licenses into a valid go program according to Options.
-func Format(ctx context.Context, options Options) (string, error) {
-	libs, err := find(ctx, options)
-	if err != nil {
-		return "", err
+// Format formats licenses according to options
+func Format(ctx context.Context, options Options) (res string, err error) {
+	resChan := make(chan string, 1)
+	errChan := make(chan error, 1)
+
+	go func() {
+		libs, err := find(ctx, options)
+		if err != nil {
+			errChan <- err
+			return
+		}
+		src, err := generate(libs, options)
+		if err != nil {
+			errChan <- err
+			return
+		}
+		fmtSrc, err := gofmt(src)
+		if err != nil {
+			errChan <- err
+			return
+		}
+		resChan <- fmtSrc
+	}()
+
+	select {
+	case res = <-resChan:
+		return
+	case err = <-errChan:
+		return
+	case <-ctx.Done():
+		return "", ctx.Err()
 	}
-	result, err := generate(libs, options)
+
+}
+
+// gofmt formats code in the standard go fmt style.
+func gofmt(code string) (string, error) {
+	bytes, err := format.Source([]byte(code))
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "Error running gofmt")
 	}
-	return gofmt(result)
+	return string(bytes), nil
 }

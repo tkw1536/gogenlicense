@@ -13,7 +13,7 @@ import (
 
 // generate generates gocode with the provided library and options.
 func generate(libraries []Library, opts Options) (string, error) {
-	context := struct {
+	fmtContext := struct {
 		Options
 
 		Libraries []Library
@@ -29,19 +29,19 @@ func generate(libraries []Library, opts Options) (string, error) {
 	}
 
 	var buffer bytes.Buffer
-	if err := templates.ExecuteTemplate(&buffer, "notices.txt.tpl", context); err != nil {
+	if err := templates.ExecuteTemplate(&buffer, "notices.txt.tpl", fmtContext); err != nil {
 		return "", errors.Wrap(err, "Failed to execute 'notices.txt.tpl'")
 	}
-	context.DocString = buffer.String()
+	fmtContext.DocString = buffer.String()
 
 	buffer.Reset()
-	if err := templates.ExecuteTemplate(&buffer, "doc.txt.tpl", context); err != nil {
+	if err := templates.ExecuteTemplate(&buffer, "doc.txt.tpl", fmtContext); err != nil {
 		return "", errors.Wrap(err, "Failed to execute 'doc.txt.tpl'")
 	}
-	context.NoticeString = buffer.String()
+	fmtContext.NoticeString = buffer.String()
 
 	buffer.Reset()
-	if err := templates.ExecuteTemplate(&buffer, "notices.go.tpl", context); err != nil {
+	if err := templates.ExecuteTemplate(&buffer, "notices.go.tpl", fmtContext); err != nil {
 		return "", errors.Wrap(err, "Failed to execute 'notices.go.tpl'")
 	}
 
