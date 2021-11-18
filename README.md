@@ -78,7 +78,9 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
-## Version 1.2.0 (Upcoming)
+## Version 1.2.1 (Upcoming)
+
+## Version 1.2.0 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.0))
 
 - Add lots of documentation.
 - Add an '-m' flag to automatically use the current go.module
