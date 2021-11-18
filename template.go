@@ -32,13 +32,13 @@ func generate(libraries []Library, opts Options) (string, error) {
 	if err := templates.ExecuteTemplate(&buffer, "notices.txt.tpl", fmtContext); err != nil {
 		return "", errors.Wrap(err, "Failed to execute 'notices.txt.tpl'")
 	}
-	fmtContext.DocString = buffer.String()
+	fmtContext.NoticeString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "doc.txt.tpl", fmtContext); err != nil {
 		return "", errors.Wrap(err, "Failed to execute 'doc.txt.tpl'")
 	}
-	fmtContext.NoticeString = buffer.String()
+	fmtContext.DocString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "notices.go.tpl", fmtContext); err != nil {
