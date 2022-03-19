@@ -80,6 +80,8 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Version 1.2.2 Upcoming
 
+- minor dependency updates
+
 ## Version 1.2.1 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.1))
 
 - Bugfix: Fix using correct templates for godoc and value string
