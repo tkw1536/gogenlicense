@@ -34,7 +34,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		paths[idx] = filepath.Join(path, "...")
 	}
 
-	libs, err := licenses.Libraries(ctx, classifier, paths...)
+	libs, err := licenses.Libraries(ctx, classifier, nil, paths...)
 	if err != nil {
 		return nil, errors.Wrap(err, "Unable to find libraries")
 	}
@@ -69,7 +69,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 			Title: fmt.Sprintf("Module %s", name),
 
 			LicenseName: licenseName,
-			LibraryURL:  libraryurl(lib),
+			LibraryURL:  libraryurl(ctx, lib),
 			LicenseText: string(licenseText),
 		})
 	}
@@ -97,14 +97,14 @@ var libraryGitRemotes = []string{
 
 // libraryurl returns the url to a library.
 // If something goes wrong, silently returns the empty url
-func libraryurl(lib *licenses.Library) string {
+func libraryurl(ctx context.Context, lib *licenses.Library) string {
 	repo, err := licenses.FindGitRepo(lib.LicensePath)
 	if err != nil { // Can't find Git repo (possibly a Go Module?) - derive URL from lib name instead.
-		url, err := lib.FileURL(lib.LicensePath)
+		url, err := lib.FileURL(ctx, lib.LicensePath)
 		if err != nil {
 			return ""
 		}
-		return url.String()
+		return url
 	}
 
 	for _, remote := range libraryGitRemotes {
