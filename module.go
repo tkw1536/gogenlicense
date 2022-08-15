@@ -8,7 +8,7 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-var errGoModNotFound = errors.New("no 'go.mod' file found, unable to find currernt module")
+var errGoModNotFound = errors.New("no 'go.mod' file found, unable to find current module")
 
 // FindModuleRoot finds the directory containing the module at path.
 // This works by finding a directory containing 'go.mod', starting recursively at path.
