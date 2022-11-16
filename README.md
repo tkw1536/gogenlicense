@@ -78,7 +78,9 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
-## Version 1.2.4 (Upcoming)
+## Version 1.2.4 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.3))
+
+- properly handle repositories in or under $GOROOT
 
 ## Version 1.2.3 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.3))
 

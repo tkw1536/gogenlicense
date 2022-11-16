@@ -8,12 +8,35 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 
 	"github.com/google/go-licenses/licenses"
 	"github.com/pkg/errors"
 )
+
+// Library is an internal representation of a library
+type Library struct {
+	Path  string
+	Title string // like path, but with "Module" prefix
+
+	LicenseName string
+	LicenseText string
+	LibraryURL  string
+}
+
+//go:embed resources/stdlib-license.txt
+var goStdLibLicense string
+
+// goStandardLibrary is the Go Standard Library
+var goStandardLibrary = Library{
+	Path:        "",
+	Title:       "Go Standard Library",
+	LicenseName: "BSD-3-Clause",
+	LicenseText: goStdLibLicense,
+	LibraryURL:  "https://golang.org/LICENSE",
+}
 
 // Some of the code below has been adapted from the 'save' and 'csv' commands of the github.com/google/go-licenses/licenses package.
 // It implements the same functionality as the original commands, however it does not output to the command line
@@ -59,6 +82,9 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		if err != nil {
 			return nil, errors.Wrapf(err, "Unable to identify license %q", lib.LicensePath)
 		}
+		if licenseName == "" {
+			panic("didn't find license")
+		}
 		licenseText, err := os.ReadFile(lib.LicensePath)
 		if err != nil {
 			return nil, errors.Wrapf(err, "Unable to read license file %q", lib.LicensePath)
@@ -98,8 +124,9 @@ var libraryGitRemotes = []string{
 // libraryurl returns the url to a library.
 // If something goes wrong, silently returns the empty url
 func libraryurl(ctx context.Context, lib *licenses.Library) string {
-	repo, err := licenses.FindGitRepo(lib.LicensePath)
-	if err != nil { // Can't find Git repo (possibly a Go Module?) - derive URL from lib name instead.
+	repo, err := findgit(lib.LicensePath)
+	if err != nil {
+		// Can't find Git repo (possibly a Go Module?) - derive URL from lib name instead.
 		url, err := lib.FileURL(ctx, lib.LicensePath)
 		if err != nil {
 			return ""
@@ -118,24 +145,31 @@ func libraryurl(ctx context.Context, lib *licenses.Library) string {
 	return ""
 }
 
-// Library is an internal representation of a library
-type Library struct {
-	Path  string
-	Title string // like path, but with "Module" prefix
+var errNotFound = fmt.Errorf("no git repository that isn't also in parent")
 
-	LicenseName string
-	LicenseText string
-	LibraryURL  string
+// findgit finds the git repository at path, but excludes any that is potentially found in GOROOT.
+func findgit(path string) (*licenses.GitRepo, error) {
+	candidate, err := licenses.FindGitRepo(path)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, repo := range forbidden {
+		if *repo == *candidate {
+			return nil, errNotFound
+		}
+	}
+
+	return candidate, nil
 }
 
-//go:embed resources/stdlib-license.txt
-var goStdLibLicense string
+// forbidden holds forbidden go repositories that should never be returned by findgit
+var forbidden []*licenses.GitRepo
 
-// goStandardLibrary is the Go Standard Library
-var goStandardLibrary = Library{
-	Path:        "",
-	Title:       "Go Standard Library",
-	LicenseName: "BSD-3-Clause",
-	LicenseText: goStdLibLicense,
-	LibraryURL:  "https://golang.org/LICENSE",
+func init() {
+	root, err := licenses.FindGitRepo(filepath.Join(runtime.GOROOT(), "_"))
+	if err != nil {
+		return
+	}
+	forbidden = append(forbidden, root)
 }
