@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/golang/glog v1.0.0
 	github.com/google/go-licenses v1.2.0
-	github.com/pkg/errors v0.9.1
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3
 )
 

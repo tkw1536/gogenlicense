@@ -2,9 +2,8 @@ package gogenlicense
 
 import (
 	"context"
+	"fmt"
 	"go/format"
-
-	"github.com/pkg/errors"
 )
 
 // Options are options for the Format function.
@@ -59,14 +58,26 @@ func Format(ctx context.Context, options Options) (res string, err error) {
 	case <-ctx.Done():
 		return "", ctx.Err()
 	}
+}
 
+// UnableToRunGoFmt indicates an error running gofmt
+type UnableToRunGoFmt struct {
+	Err error
+}
+
+func (urf UnableToRunGoFmt) Error() string {
+	return fmt.Sprintf("unable to run gofmt: %s", urf.Err)
+}
+
+func (urf UnableToRunGoFmt) Unwrap() error {
+	return urf.Err
 }
 
 // gofmt formats code in the standard go fmt style.
 func gofmt(code string) (string, error) {
 	bytes, err := format.Source([]byte(code))
 	if err != nil {
-		return "", errors.Wrap(err, "Error running gofmt")
+		return "", UnableToRunGoFmt{Err: err}
 	}
 	return string(bytes), nil
 }

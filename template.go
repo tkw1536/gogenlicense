@@ -3,13 +3,26 @@ package gogenlicense
 import (
 	"bytes"
 	"embed"
+	"fmt"
 	"strings"
 	"text/template"
 	"time"
 	"unicode"
-
-	"github.com/pkg/errors"
 )
+
+// TemplateError represents an error running a template
+type TemplateError struct {
+	Template string
+	Err      error
+}
+
+func (te TemplateError) Error() string {
+	return fmt.Sprintf("unable to run template %q: %s", te.Template, te.Err)
+}
+
+func (te TemplateError) Unwrap() error {
+	return te.Err
+}
 
 // generate generates gocode with the provided library and options.
 func generate(libraries []Library, opts Options) (string, error) {
@@ -30,19 +43,19 @@ func generate(libraries []Library, opts Options) (string, error) {
 
 	var buffer bytes.Buffer
 	if err := templates.ExecuteTemplate(&buffer, "notices.txt.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'notices.txt.tpl'")
+		return "", TemplateError{Err: err, Template: "notices.txt.tpl"}
 	}
 	fmtContext.NoticeString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "doc.txt.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'doc.txt.tpl'")
+		return "", TemplateError{Err: err, Template: "doc.txt.tpl"}
 	}
 	fmtContext.DocString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "notices.go.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'notices.go.tpl'")
+		return "", TemplateError{Err: err, Template: "notices.txt.tpl"}
 	}
 
 	return buffer.String(), nil

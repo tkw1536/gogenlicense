@@ -5,6 +5,7 @@ package gogenlicense
 import (
 	"context"
 	_ "embed"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,7 +14,6 @@ import (
 	"strings"
 
 	"github.com/google/go-licenses/licenses"
-	"github.com/pkg/errors"
 )
 
 // Library is an internal representation of a library
@@ -38,6 +38,63 @@ var goStandardLibrary = Library{
 	LibraryURL:  "https://golang.org/LICENSE",
 }
 
+// UnableToCreateClassifier indidicates an error creating a licenses classifier
+type UnableToCreateClassifier struct {
+	Err error
+}
+
+func (ua UnableToCreateClassifier) Error() string {
+	return fmt.Sprintf("unable to create classifier: %s", ua.Err)
+}
+
+func (ua UnableToCreateClassifier) Unwrap() error {
+	return ua.Err
+}
+
+// UnableToFindLibraries indidicates an error trying to find libraries
+type UnableToFindLibraries struct {
+	Err error
+}
+
+func (ul UnableToFindLibraries) Error() string {
+	return fmt.Sprintf("unable to find libraries: %s", ul.Err)
+}
+
+func (ul UnableToFindLibraries) Unwrap() error {
+	return ul.Err
+}
+
+// UnableToIdentifyLicense indicates an error attempting to identify the given license
+type UnableToIdentifyLicense struct {
+	Path string
+	Err  error
+}
+
+func (ui UnableToIdentifyLicense) Error() string {
+	return fmt.Sprintf("unable to identify license at %q: %s", ui.Path, ui.Err)
+}
+
+func (ui UnableToIdentifyLicense) Unwrap() error {
+	return ui.Err
+}
+
+// UnableToReadLicense indicates an error attempting to read the given license
+type UnableToReadLicense struct {
+	Path string
+	Err  error
+}
+
+func (ur UnableToReadLicense) Error() string {
+	return fmt.Sprintf("unable to read license at %q: %s", ur.Path, ur.Err)
+}
+
+func (ur UnableToReadLicense) Unwrap() error {
+	return ur.Err
+}
+
+// ErrUnknownLicense indicates that no known license is found in the given file
+var ErrUnknownLicense = errors.New("unknown license")
+
 // Some of the code below has been adapted from the 'save' and 'csv' commands of the github.com/google/go-licenses/licenses package.
 // It implements the same functionality as the original commands, however it does not output to the command line
 // but into a string that is further processed.
@@ -49,7 +106,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 	classifier, err := licenses.NewClassifier(options.ConfidenceThreshold)
 	if err != nil {
-		return nil, errors.Wrap(err, "Unable to create classifier")
+		return nil, UnableToCreateClassifier{Err: err}
 	}
 
 	paths := make([]string, len(options.ModulePaths))
@@ -59,7 +116,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 	libs, err := licenses.Libraries(ctx, classifier, nil, paths...)
 	if err != nil {
-		return nil, errors.Wrap(err, "Unable to find libraries")
+		return nil, UnableToFindLibraries{Err: err}
 	}
 
 	libraries := make([]Library, 0, len(libs))
@@ -80,14 +137,14 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 		licenseName, _, err := classifier.Identify(lib.LicensePath)
 		if err != nil {
-			return nil, errors.Wrapf(err, "Unable to identify license %q", lib.LicensePath)
+			return nil, UnableToIdentifyLicense{Path: lib.LicensePath, Err: err}
 		}
 		if licenseName == "" {
-			panic("didn't find license")
+			return nil, UnableToIdentifyLicense{Path: lib.LicensePath, Err: ErrUnknownLicense}
 		}
 		licenseText, err := os.ReadFile(lib.LicensePath)
 		if err != nil {
-			return nil, errors.Wrapf(err, "Unable to read license file %q", lib.LicensePath)
+			return nil, UnableToReadLicense{Path: lib.LicensePath, Err: err}
 		}
 
 		libraries = append(libraries, Library{
