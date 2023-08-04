@@ -78,7 +78,13 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
-## Version 1.2.4 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.3))
+## Version 1.2.5 (Released [Aug 8 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.5))
+
+- add 'spellchecker:disable' comment to template
+- fix typos in documentation
+- update dependencies
+
+## Version 1.2.4 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.4))
 
 - properly handle repositories in or under $GOROOT
 
