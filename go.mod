@@ -1,6 +1,6 @@
 module github.com/tkw1536/gogenlicense
 
-go 1.17
+go 1.19
 
 require (
 	github.com/golang/glog v1.1.1
