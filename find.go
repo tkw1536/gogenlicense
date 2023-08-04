@@ -15,7 +15,6 @@ import (
 	"strings"
 
 	"github.com/google/go-licenses/licenses"
-	"github.com/pkg/errors"
 )
 
 // Library is an internal representation of a library
@@ -51,7 +50,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 	classifier, err := licenses.NewClassifier(options.ConfidenceThreshold)
 	if err != nil {
-		return nil, errors.Wrap(err, "Unable to create classifier")
+		return nil, fmt.Errorf("unable to create classifier: %w", err)
 	}
 
 	paths := make([]string, len(options.ModulePaths))
@@ -61,7 +60,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 	libs, err := licenses.Libraries(ctx, classifier, nil, paths...)
 	if err != nil {
-		return nil, errors.Wrap(err, "Unable to find libraries")
+		return nil, fmt.Errorf("unable to find libraries: %w", err)
 	}
 
 	libraries := make([]Library, 0, len(libs))
@@ -82,14 +81,14 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 		licenseName, _, err := classifier.Identify(lib.LicensePath)
 		if err != nil {
-			return nil, errors.Wrapf(err, "Unable to identify license %q", lib.LicensePath)
+			return nil, fmt.Errorf("unable to identify license %q: %w", lib.LicensePath, err)
 		}
 		if licenseName == "" {
 			panic("didn't find license")
 		}
 		licenseText, err := os.ReadFile(lib.LicensePath)
 		if err != nil {
-			return nil, errors.Wrapf(err, "Unable to read license file %q", lib.LicensePath)
+			return nil, fmt.Errorf("unable to read license file %q: %w", lib.LicensePath, err)
 		}
 
 		libraries = append(libraries, Library{

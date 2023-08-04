@@ -2,9 +2,8 @@ package gogenlicense
 
 import (
 	"context"
+	"fmt"
 	"go/format"
-
-	"github.com/pkg/errors"
 )
 
 // cspell:words gofmt
@@ -68,7 +67,7 @@ func Format(ctx context.Context, options Options) (res string, err error) {
 func gofmt(code string) (string, error) {
 	bytes, err := format.Source([]byte(code))
 	if err != nil {
-		return "", errors.Wrap(err, "Error running gofmt")
+		return "", fmt.Errorf("error running gofmt: %w", err)
 	}
 	return string(bytes), nil
 }
