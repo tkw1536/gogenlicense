@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+// cspell:words gogenlicense
+
 func ExampleFindModulePath() {
 	// get the current directory - module containing this example
 	dir, err := os.Getwd()

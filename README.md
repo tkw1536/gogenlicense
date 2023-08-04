@@ -54,7 +54,7 @@ gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-
   Print a usage message and exit.
 -p PACKAGE
   Package name of go source code file to generate.
-  Defaults to the 'GOPACKAGE' encvironment variable, or to 'notices' if unset.
+  Defaults to the 'GOPACKAGE' environment variable, or to 'notices' if unset.
 -n string
   Name of declaration to generate (default 'Notices')
 -t THRESHOLD
@@ -109,3 +109,5 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 ### Version 1.0.0 (Released [Dec 8 2020](https://github.com/tkw1536/gogenlicense/releases/tag/v1.0.0))
 
 - Initial release
+
+<!-- cspell:words gogenlicense godoc println gopackage gofile goroot  -->

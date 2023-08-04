@@ -42,7 +42,7 @@
 //	  Print a usage message and exit.
 //	-p PACKAGE
 //	  Package name of go source code file to generate.
-//	  Defaults to the 'GOPACKAGE' encvironment variable, or to 'notices' if unset.
+//	  Defaults to the 'GOPACKAGE' environment variable, or to 'notices' if unset.
 //	-n string
 //	  Name of declaration to generate (default 'Notices')
 //	-t THRESHOLD
@@ -63,6 +63,8 @@
 // Internally this command relies on the excellent https://github.com/google/go-licenses package.
 // See also the legal subpackage for full licenses of used packages.
 package main
+
+// cspell:words quickstart gopackage gofile glog gofmt subpackage gogenlicense godoc
 
 import (
 	"context"

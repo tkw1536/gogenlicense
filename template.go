@@ -3,13 +3,14 @@ package gogenlicense
 import (
 	"bytes"
 	"embed"
+	"fmt"
 	"strings"
 	"text/template"
 	"time"
 	"unicode"
-
-	"github.com/pkg/errors"
 )
+
+// cspell:words gocode asheading gogenlicense godoc
 
 // generate generates gocode with the provided library and options.
 func generate(libraries []Library, opts Options) (string, error) {
@@ -30,19 +31,19 @@ func generate(libraries []Library, opts Options) (string, error) {
 
 	var buffer bytes.Buffer
 	if err := templates.ExecuteTemplate(&buffer, "notices.txt.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'notices.txt.tpl'")
+		return "", fmt.Errorf("failed to execute 'notices.txt.tpl': %w", err)
 	}
 	fmtContext.NoticeString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "doc.txt.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'doc.txt.tpl'")
+		return "", fmt.Errorf("failed to execute 'doc.txt.tpl': %w", err)
 	}
 	fmtContext.DocString = buffer.String()
 
 	buffer.Reset()
 	if err := templates.ExecuteTemplate(&buffer, "notices.go.tpl", fmtContext); err != nil {
-		return "", errors.Wrap(err, "Failed to execute 'notices.go.tpl'")
+		return "", fmt.Errorf("failed to execute 'notices.go.tpl': %w", err)
 	}
 
 	return buffer.String(), nil

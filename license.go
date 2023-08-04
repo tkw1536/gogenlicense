@@ -7,6 +7,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// cspell:words gofmt
+
 // Options are options for the Format function.
 type Options struct {
 	// ModulePaths are go import paths to generate license information for.
