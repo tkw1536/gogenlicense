@@ -78,6 +78,12 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
+## Version 1.2.6 (Released [Aug 19 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.6))
+
+- add 'DO NOT EDIT' comment to template
+- update spellchecker template
+
+
 ## Version 1.2.5 (Released [Aug 8 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.5))
 
 - add 'spellchecker:disable' comment to template
