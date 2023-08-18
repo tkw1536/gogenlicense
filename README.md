@@ -82,6 +82,7 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 - add 'DO NOT EDIT' comment to template
 - update spellchecker template
+- update to go 1.20
 
 
 ## Version 1.2.5 (Released [Aug 8 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.5))
