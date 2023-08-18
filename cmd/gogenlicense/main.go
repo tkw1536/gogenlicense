@@ -64,7 +64,7 @@
 // See also the legal subpackage for full licenses of used packages.
 package main
 
-// cspell:words quickstart gopackage gofile glog gofmt subpackage gogenlicense godoc
+// spellchecker: words quickstart gopackage gofile glog gofmt subpackage gogenlicense godoc
 
 import (
 	"context"

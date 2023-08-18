@@ -6,7 +6,7 @@ import (
 	"go/format"
 )
 
-// cspell:words gofmt
+// spellchecker: words gofmt
 
 // Options are options for the Format function.
 type Options struct {

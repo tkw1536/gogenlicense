@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// cspell:words gogenlicense
+// spellchecker: words gogenlicense
 
 func ExampleFindModulePath() {
 	// get the current directory - module containing this example

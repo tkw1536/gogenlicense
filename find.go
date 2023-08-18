@@ -2,7 +2,7 @@
 // See github.com/tkw1536/gogenlicense/cmd/gogenlicense.
 package gogenlicense
 
-// cspell:words stdlib libraryurl findgit gogenlicense
+// spellchecker: words stdlib libraryurl findgit gogenlicense
 
 import (
 	"context"

@@ -116,4 +116,4 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 - Initial release
 
-<!-- cspell:words gogenlicense godoc println gopackage gofile goroot  -->
+<!-- spellchecker: words gogenlicense godoc println gopackage gofile goroot  -->

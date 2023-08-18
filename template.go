@@ -10,7 +10,7 @@ import (
 	"unicode"
 )
 
-// cspell:words gocode asheading gogenlicense godoc
+// spellchecker: words gocode asheading gogenlicense godoc
 
 // generate generates gocode with the provided library and options.
 func generate(libraries []Library, opts Options) (string, error) {
