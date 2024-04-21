@@ -78,6 +78,11 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
+## Version 1.2.7 (Released [Apr 22 2024](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.7))
+
+- use a constant declaration instead of a variable one
+- update dependencies
+
 ## Version 1.2.6 (Released [Aug 19 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.6))
 
 - add 'DO NOT EDIT' comment to template

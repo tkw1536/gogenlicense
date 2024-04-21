@@ -7,8 +7,4 @@ package {{ .Options.OutPackage }}
 
 
 {{ prefix .DocString "// " }}
-var {{ .Options.DeclarationName }} string
-
-func init() {
-	{{ .Options.DeclarationName }} = {{ .NoticeString | printf "%q" }}
-}
+const {{ .Options.DeclarationName }} = {{ .NoticeString | printf "%q" }}

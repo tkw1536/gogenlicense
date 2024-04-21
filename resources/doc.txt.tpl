@@ -2,8 +2,7 @@
 These notices consist of a list of dependencies along with their license information.
 This string is intended to be displayed to the enduser on demand.
 
-Even though the value of this variable is fixed at compile time it is omitted from this documentation.
-Instead the list of go modules, along with their licenses, is listed below. 
+The list of go modules, along with their licenses, is listed below. 
 
 {{ range $index, $library := .Libraries }}
 {{ $library.Title | asheading }}
