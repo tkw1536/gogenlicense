@@ -64,7 +64,7 @@
 // See also the legal subpackage for full licenses of used packages.
 package main
 
-// spellchecker: words quickstart gopackage gofile glog gofmt subpackage gogenlicense godoc
+// spellchecker: words quickstart gopackage gofile glog gofmt subpackage gogenlicense godoc workdir licenseclassifier
 
 import (
 	"context"
@@ -125,7 +125,7 @@ func init() {
 		if legalFlag {
 			fmt.Println("This executable contains code from several different go packages. ")
 			fmt.Println("Some of these packages require licensing information to be made available to the end user. ")
-			fmt.Println(legal.Notices)
+			fmt.Print(legal.Notices)
 			os.Exit(0)
 		}
 	}()
