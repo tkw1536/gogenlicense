@@ -3,15 +3,15 @@ name: CI
 on: [push, pull_request]
 
 env:
-  GO_VERSION: '^1.20'
+  GO_VERSION: '^1.24'
   GO_STABLE: 'true'
 
 jobs:
     lint:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - uses: actions/setup-go@v2
+          - uses: actions/checkout@v4
+          - uses: actions/setup-go@v5
             with:
               stable: ${{ env.GO_STABLE }}
               go-version: ${{ env.GO_VERSION }}
@@ -20,8 +20,8 @@ jobs:
     test:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - uses: actions/setup-go@v2
+          - uses: actions/checkout@v4
+          - uses: actions/setup-go@v5
             with:
               stable: ${{ env.GO_STABLE }}
               go-version: ${{ env.GO_VERSION }}
@@ -32,15 +32,15 @@ jobs:
     build:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - uses: actions/setup-go@v2
+          - uses: actions/checkout@v4
+          - uses: actions/setup-go@v5
             with:
               stable: ${{ env.GO_STABLE }}
               go-version: ${{ env.GO_VERSION }}
           - name: Build executables
             run: go build ./cmd/gogenlicense
           - name: Upload executables
-            uses: actions/upload-artifact@v2
+            uses: actions/upload-artifact@v4
             with:
               name: Binaries
               path: gogenlicense
