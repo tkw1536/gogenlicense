@@ -58,7 +58,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		paths[idx] = filepath.Join(path, "...")
 	}
 
-	libs, err := licenses.Libraries(ctx, classifier, nil, paths...)
+	libs, err := licenses.Libraries(ctx, classifier, false, nil, paths...)
 	if err != nil {
 		return nil, fmt.Errorf("unable to find libraries: %w", err)
 	}
