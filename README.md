@@ -78,41 +78,47 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
-## Version 1.2.7 (Released [Apr 22 2024](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.7))
+### Version 1.3.0 (Released [Mar 31 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.3.0))
+
+- switch to go-licenses v2 alpha
+- update dependencies
+- update to go 1.24
+
+### Version 1.2.7 (Released [Apr 22 2024](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.7))
 
 - use a constant declaration instead of a variable one
 - update dependencies
 
-## Version 1.2.6 (Released [Aug 19 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.6))
+### Version 1.2.6 (Released [Aug 19 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.6))
 
 - add 'DO NOT EDIT' comment to template
 - update spellchecker template
 - update to go 1.20
 
 
-## Version 1.2.5 (Released [Aug 8 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.5))
+### Version 1.2.5 (Released [Aug 8 2023](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.5))
 
 - add 'spellchecker:disable' comment to template
 - fix typos in documentation
 - update dependencies
 
-## Version 1.2.4 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.4))
+### Version 1.2.4 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.4))
 
 - properly handle repositories in or under $GOROOT
 
-## Version 1.2.3 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.3))
+### Version 1.2.3 (Released [Aug 15 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.3))
 
 - fix typo in error message
 
-## Version 1.2.2 (Released [Apr 28 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.2))
+### Version 1.2.2 (Released [Apr 28 2022](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.2))
 
 - minor dependency updates
 
-## Version 1.2.1 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.1))
+### Version 1.2.1 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.1))
 
 - Bugfix: Fix using correct templates for godoc and value string
 
-## Version 1.2.0 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.0))
+### Version 1.2.0 (Released [Nov 18 2021](https://github.com/tkw1536/gogenlicense/releases/tag/v1.2.0))
 
 - Add lots of documentation.
 - Add an '-m' flag to automatically use the current go.module
