@@ -10,11 +10,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
+	"time"
 
-	"github.com/google/go-licenses/licenses"
+	"github.com/google/go-licenses/v2/licenses"
 )
 
 // Library is an internal representation of a library
@@ -48,7 +48,7 @@ var goStandardLibrary = Library{
 // find finds licenses according to options
 func find(ctx context.Context, options Options) ([]Library, error) {
 
-	classifier, err := licenses.NewClassifier(options.ConfidenceThreshold)
+	classifier, err := licenses.NewClassifier()
 	if err != nil {
 		return nil, fmt.Errorf("unable to create classifier: %w", err)
 	}
@@ -75,28 +75,28 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 		// do not include anything where the license file is a .go file.
 		// That's a potential bug in "github.com/google/go-licenses/licenses".
-		if strings.EqualFold(filepath.Ext(lib.LicensePath), ".go") {
+		if strings.EqualFold(filepath.Ext(lib.LicenseFile), ".go") {
 			continue
 		}
 
-		licenseName, _, err := classifier.Identify(lib.LicensePath)
+		licenses := lib.Licenses
+		if len(licenses) == 0 {
+			return nil, fmt.Errorf("license classifier returned no licenses for %q", lib.LicenseFile)
+		}
+
+		licenseText, err := os.ReadFile(lib.LicenseFile)
 		if err != nil {
-			return nil, fmt.Errorf("unable to identify license %q: %w", lib.LicensePath, err)
+			return nil, fmt.Errorf("unable to read license file %q: %w", lib.LicenseFile, err)
 		}
-		if licenseName == "" {
-			panic("didn't find license")
-		}
-		licenseText, err := os.ReadFile(lib.LicensePath)
-		if err != nil {
-			return nil, fmt.Errorf("unable to read license file %q: %w", lib.LicensePath, err)
-		}
+
+		url, _ := goLicensesLibraryFileURL(lib, context.Background(), time.Minute, lib.LicenseFile)
 
 		libraries = append(libraries, Library{
 			Path:  name,
 			Title: fmt.Sprintf("Module %s", name),
 
-			LicenseName: licenseName,
-			LibraryURL:  libraryurl(ctx, lib),
+			LicenseName: licenses[0].Name,
+			LibraryURL:  url,
 			LicenseText: string(licenseText),
 		})
 	}
@@ -116,61 +116,4 @@ func contains(needle string, haystack []string) bool {
 		}
 	}
 	return false
-}
-
-var libraryGitRemotes = []string{
-	"origin", "upstream",
-}
-
-// libraryurl returns the url to a library.
-// If something goes wrong, silently returns the empty url
-func libraryurl(ctx context.Context, lib *licenses.Library) string {
-	repo, err := findgit(lib.LicensePath)
-	if err != nil {
-		// Can't find Git repo (possibly a Go Module?) - derive URL from lib name instead.
-		url, err := lib.FileURL(ctx, lib.LicensePath)
-		if err != nil {
-			return ""
-		}
-		return url
-	}
-
-	for _, remote := range libraryGitRemotes {
-		url, err := repo.FileURL(lib.LicensePath, remote)
-		if err != nil {
-			continue
-		}
-		return url.String()
-	}
-
-	return ""
-}
-
-var errNotFound = fmt.Errorf("no git repository that isn't also in parent")
-
-// findgit finds the git repository at path, but excludes any that is potentially found in GOROOT.
-func findgit(path string) (*licenses.GitRepo, error) {
-	candidate, err := licenses.FindGitRepo(path)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, repo := range forbidden {
-		if *repo == *candidate {
-			return nil, errNotFound
-		}
-	}
-
-	return candidate, nil
-}
-
-// forbidden holds forbidden go repositories that should never be returned by findgit
-var forbidden []*licenses.GitRepo
-
-func init() {
-	root, err := licenses.FindGitRepo(filepath.Join(runtime.GOROOT(), "_"))
-	if err != nil {
-		return
-	}
-	forbidden = append(forbidden, root)
 }
