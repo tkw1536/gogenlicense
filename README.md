@@ -57,9 +57,8 @@ gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-
   Defaults to the 'GOPACKAGE' environment variable, or to 'notices' if unset.
 -n string
   Name of declaration to generate (default 'Notices')
--t THRESHOLD
- Threshold to use for the license classifier, between 0 and 1.
- Defaults to 0.9.
+-include-tests
+  Include test dependencies.
 -o filename
   Path to write output to.
   Defaults to appending a suffix '_notices' to the source file pointed to by the 'GOFILE' environment variable.

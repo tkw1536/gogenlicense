@@ -17,9 +17,8 @@ type Options struct {
 	// When set to true, include them.
 	IncludeRoots bool
 
-	// ConfidenceThreshold is the confidence threshold for the license classifier.
-	// The default is 0.9.
-	ConfidenceThreshold float64
+	// Should test sources be included?
+	IncludeTests bool
 
 	// Name of the package to output
 	OutPackage string

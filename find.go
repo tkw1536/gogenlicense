@@ -8,6 +8,7 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -15,6 +16,7 @@ import (
 	"time"
 
 	"github.com/google/go-licenses/v2/licenses"
+	"go.opencensus.io/plugin/ochttp"
 )
 
 // Library is an internal representation of a library
@@ -58,12 +60,17 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		paths[idx] = filepath.Join(path, "...")
 	}
 
-	libs, err := licenses.Libraries(ctx, classifier, false, nil, paths...)
+	libs, err := licenses.Libraries(ctx, classifier, options.IncludeTests, nil, paths...)
 	if err != nil {
 		return nil, fmt.Errorf("unable to find libraries: %w", err)
 	}
 
 	libraries := make([]Library, 0, len(libs))
+
+	cl := &http.Client{
+		Transport: &ochttp.Transport{},
+		Timeout:   time.Minute,
+	}
 
 	for _, lib := range libs {
 		name := lib.Name()
@@ -89,7 +96,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 			return nil, fmt.Errorf("unable to read license file %q: %w", lib.LicenseFile, err)
 		}
 
-		url, _ := goLicensesLibraryFileURL(lib, context.Background(), time.Minute, lib.LicenseFile)
+		url, _ := goLicensesLibraryFileURL(lib, context.Background(), cl, lib.LicenseFile)
 
 		libraries = append(libraries, Library{
 			Path:  name,

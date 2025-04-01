@@ -35,27 +35,26 @@
 //
 // The full invocation of the command is as follows:
 //
-//	gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-m] [MODULE [MODULE...]]
-//	-legal
-//	  Print legal notices and exit.
-//	-help
-//	  Print a usage message and exit.
-//	-p PACKAGE
-//	  Package name of go source code file to generate.
-//	  Defaults to the 'GOPACKAGE' environment variable, or to 'notices' if unset.
-//	-n string
-//	  Name of declaration to generate (default 'Notices')
-//	-t THRESHOLD
-//	 Threshold to use for the license classifier, between 0 and 1.
-//	 Defaults to 0.9.
-//	-o filename
-//	  Path to write output to.
-//	  Defaults to appending a suffix '_notices' to the source file pointed to by the 'GOFILE' environment variable.
-//	  If 'GOFILE' is not provided, uses the filename 'notices.go'.
-//	MODULE
-//	  Import path of module to scan for module dependencies.
-//	-m
-//	  automatically find the current 'go module' containing the working directory and include it in MODULE list.
+//		gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-m] [MODULE [MODULE...]]
+//		-legal
+//		  Print legal notices and exit.
+//		-help
+//		  Print a usage message and exit.
+//		-p PACKAGE
+//		  Package name of go source code file to generate.
+//		  Defaults to the 'GOPACKAGE' environment variable, or to 'notices' if unset.
+//		-n string
+//		  Name of declaration to generate (default 'Notices')
+//		-include-tests
+//	 	  Include test dependencies.
+//		-o filename
+//		  Path to write output to.
+//		  Defaults to appending a suffix '_notices' to the source file pointed to by the 'GOFILE' environment variable.
+//		  If 'GOFILE' is not provided, uses the filename 'notices.go'.
+//		MODULE
+//		  Import path of module to scan for module dependencies.
+//		-m
+//		  automatically find the current 'go module' containing the working directory and include it in MODULE list.
 //
 // # Acknowledgements
 //
@@ -83,8 +82,9 @@ import (
 
 func main() {
 	result, err := gogenlicense.Format(globalContext, gogenlicense.Options{
-		ModulePaths:         argImportPaths,
-		ConfidenceThreshold: flagConfidenceThreshold,
+		ModulePaths: argImportPaths,
+
+		IncludeTests: flagIncludeTests,
 
 		OutPackage:      flagOutPackage,
 		DeclarationName: flagDeclarationName,
@@ -109,7 +109,7 @@ func main() {
 //
 
 var argImportPaths []string
-var flagConfidenceThreshold float64
+var flagIncludeTests bool
 var flagOutFile string
 var flagOutPackage string
 var flagDeclarationName string
@@ -167,8 +167,7 @@ func init() {
 		flagOutFile = "legal.go"
 	}()
 
-	flagConfidenceThreshold = 0.9
-	flag.Float64Var(&flagConfidenceThreshold, "t", flagConfidenceThreshold, "Threshold for the licenseclassifier")
+	flag.BoolVar(&flagIncludeTests, "include-tests", flagIncludeTests, "include test dependencies")
 
 	flag.BoolVar(&flagModule, "m", flagModule, "automatically use current 'go module' path as an import path")
 	defer func() {
