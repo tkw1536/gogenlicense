@@ -79,6 +79,10 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
+### Version 1.4.0 (Released [Apr 21 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.4.0))
+
+- add 'skip-no-license' argument
+
 ### Version 1.3.0 (Released [Mar 31 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.3.0))
 
 - switch to go-licenses v2 alpha
