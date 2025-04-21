@@ -35,7 +35,7 @@
 //
 // The full invocation of the command is as follows:
 //
-//		gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-m] [MODULE [MODULE...]]
+//		gogenlicense [-legal] [-help] [-o FILE] [-p PACKAGE] [-n NAME] [-skip-no-license] [-m] [MODULE [MODULE...]]
 //		-legal
 //		  Print legal notices and exit.
 //		-help
@@ -47,6 +47,8 @@
 //		  Name of declaration to generate (default 'Notices')
 //		-include-tests
 //	 	  Include test dependencies.
+//		-skip-no-license
+//		  Ignore modules with no license.
 //		-o filename
 //		  Path to write output to.
 //		  Defaults to appending a suffix '_notices' to the source file pointed to by the 'GOFILE' environment variable.
@@ -88,6 +90,7 @@ func main() {
 
 		OutPackage:      flagOutPackage,
 		DeclarationName: flagDeclarationName,
+		SkipNoLicense:   flagSkipNoLicense,
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -114,6 +117,7 @@ var flagOutFile string
 var flagOutPackage string
 var flagDeclarationName string
 var flagModule bool
+var flagSkipNoLicense bool
 
 func init() {
 	// HACK HACK HACK: remove glog flags by re-initializing the flagset
@@ -168,6 +172,8 @@ func init() {
 	}()
 
 	flag.BoolVar(&flagIncludeTests, "include-tests", flagIncludeTests, "include test dependencies")
+
+	flag.BoolVar(&flagSkipNoLicense, "skip-no-license", flagSkipNoLicense, "ignore modules with no license")
 
 	flag.BoolVar(&flagModule, "m", flagModule, "automatically use current 'go module' path as an import path")
 	defer func() {

@@ -88,7 +88,10 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 		licenses := lib.Licenses
 		if len(licenses) == 0 {
-			return nil, fmt.Errorf("license classifier returned no licenses for %q", lib.LicenseFile)
+			if options.SkipNoLicense {
+				continue
+			}
+			return nil, fmt.Errorf("license classifier returned no licenses for %q", name)
 		}
 
 		licenseText, err := os.ReadFile(lib.LicenseFile)

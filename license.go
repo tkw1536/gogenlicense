@@ -10,6 +10,9 @@ import (
 
 // Options are options for the Format function.
 type Options struct {
+	// When set to true, ignore libraries with no license
+	SkipNoLicense bool
+
 	// ModulePaths are go import paths to generate license information for.
 	ModulePaths []string
 

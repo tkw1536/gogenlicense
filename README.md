@@ -47,7 +47,7 @@ The legal flag is implemented in the main package.
 ## Usage
 
 ```
-gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-m] [MODULE [MODULE...]]
+gogenlicense [-legal] [-help] [-o FILE] [-p PACKAGE] [-n NAME] [-skip-no-license] [-m] [MODULE [MODULE...]]
 -legal
   Print legal notices and exit.
 -help
@@ -59,6 +59,8 @@ gogenlicense [-legal] [-help] [-o FILE] [-t THRESHOLD] [-p PACKAGE] [-n NAME] [-
   Name of declaration to generate (default 'Notices')
 -include-tests
   Include test dependencies.
+-skip-no-license
+  Ignore modules with no license.
 -o filename
   Path to write output to.
   Defaults to appending a suffix '_notices' to the source file pointed to by the 'GOFILE' environment variable.
