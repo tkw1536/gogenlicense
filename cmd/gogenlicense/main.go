@@ -26,7 +26,7 @@
 //	}()
 //
 // For a more complete example, see the source code of this command.
-// The notices constant is implemented in the github.com/tkw1536/gogenlicense/legal subpackage.
+// The notices constant is implemented in the go.tkw01536.de/gogenlicense/legal subpackage.
 // The legal flag is implemented in the main package.
 //
 // For usage of the go generate command, see https://golang.org/pkg/cmd/go/internal/generate/.
@@ -78,8 +78,8 @@ import (
 	"strings"
 
 	"github.com/golang/glog"
-	"github.com/tkw1536/gogenlicense"
-	"github.com/tkw1536/gogenlicense/legal"
+	"go.tkw01536.de/gogenlicense"
+	"go.tkw01536.de/gogenlicense/legal"
 )
 
 func main() {

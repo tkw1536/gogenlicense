@@ -1,5 +1,5 @@
 // Package gogenlicense implements the gogenlicense command.
-// See github.com/tkw1536/gogenlicense/cmd/gogenlicense.
+// See go.tkw01536.de/gogenlicense/cmd/gogenlicense.
 package gogenlicense
 
 // spellchecker: words stdlib libraryurl findgit gogenlicense

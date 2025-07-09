@@ -3,4 +3,4 @@ package legal
 
 // spellchecker: words gogenlicense
 
-//go:generate gogenlicense -m -include-tests
+//go:generate go tool gogenlicense -m -include-tests

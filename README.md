@@ -10,16 +10,16 @@ It also generates appropriate comments for godoc.
 
 ## Quickstart
 
-Install the command using standard go tools:
+Install the command as a `go tool`:
 
 ```bash
-go install github.com/tkw1536/gogenlicense/cmd/gogenlicense@latest
+go get -tool github.com/tkw1536/gogenlicense/cmd/gogenlicense@latest
 ```
 
 gogenlicense is most commonly invoked using a 'go:generate' comment like so:
 
 ```go
-//go:generate gogenlicense -m
+//go:generate go tool gogenlicense -m
 ```
 
 After adding such a comment, run the [`go generate` command](https://golang.org/pkg/cmd/go/internal/generate/).
@@ -41,7 +41,7 @@ defer func() {
 ```
 
 For a more complete example, see the source code of [the gogenlicense command](./cmd/gogenlicense/main.go).
-The notices constant is implemented in the [github.com/tkw1536/gogenlicense/legal](./legal/docs.go) subpackage.
+The notices constant is implemented in the [go.tkw01536.de/gogenlicense/legal](./legal/docs.go) subpackage.
 The legal flag is implemented in the main package.
 
 ## Usage
@@ -78,6 +78,11 @@ Internally the command relies on the excellent https://github.com/google/go-lice
 See also the [legal subpackage](./legal/docs_notices.go) for full licenses of used packages.
 
 ## Changelog
+
+### Version 1.5.0 (Released [Jul 9 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.5.0))
+
+- update import path
+- make use of `go tool`
 
 ### Version 1.4.0 (Released [Apr 21 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.4.0))
 

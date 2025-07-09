@@ -20,5 +20,5 @@ func ExampleFindModulePath() {
 		panic(err)
 	}
 	fmt.Println(module)
-	// Output: github.com/tkw1536/gogenlicense
+	// Output: go.tkw01536.de/gogenlicense
 }
