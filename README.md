@@ -79,6 +79,9 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
+### Version 1.6.0 (Released [Aug 14 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.6.0))
+- update to go1.25
+
 ### Version 1.5.0 (Released [Jul 9 2025](https://github.com/tkw1536/gogenlicense/releases/tag/v1.5.0))
 
 - update import path
