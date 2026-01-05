@@ -13,7 +13,7 @@ It also generates appropriate comments for godoc.
 Install the command as a `go tool`:
 
 ```bash
-go get -tool github.com/tkw1536/gogenlicense/cmd/gogenlicense@latest
+go get -tool go get -tool go.tkw01536.de/gogenlicense/cmd/gogenlicense@latest
 ```
 
 gogenlicense is most commonly invoked using a 'go:generate' comment like so:
