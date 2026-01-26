@@ -9,8 +9,8 @@ jobs:
     lint:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-go@v5
+          - uses: actions/checkout@v6
+          - uses: actions/setup-go@v6
             with:
               go-version: ${{ env.GO_VERSION }}
           - name: Check that 'gofmt' has been run
@@ -18,8 +18,8 @@ jobs:
     test:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-go@v5
+          - uses: actions/checkout@v6
+          - uses: actions/setup-go@v6
             with:
               go-version: ${{ env.GO_VERSION }}
           - name: Run 'go generate'
@@ -27,14 +27,14 @@ jobs:
     build:
       runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-go@v5
+          - uses: actions/checkout@v6
+          - uses: actions/setup-go@v6
             with:
               go-version: ${{ env.GO_VERSION }}
           - name: Build executables
             run: go build ./cmd/gogenlicense
           - name: Upload executables
-            uses: actions/upload-artifact@v4
+            uses: actions/upload-artifact@v6
             with:
               name: Binaries
               path: gogenlicense
