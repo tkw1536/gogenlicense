@@ -6,8 +6,11 @@ The following go packages are imported:
 {{ range $index, $library := .Libraries }}
 ================================================================================
 {{$library.Title}}
-Licensed under the Terms of the {{ $library.LicenseName }} License{{if $library.LibraryURL }}, see also {{$library.LibraryURL}}{{end}}. 
+Licensed under the Terms of the {{ $library.LicenseName }} License{{if $library.LibraryURL }}, see also {{$library.LibraryURL}}{{end}}. {{ if $library.NoticeURL }}See also the notice file at {{$library.NoticeURL}}. {{end}}
 
-{{ $library.LicenseText }}
+{{ $library.LicenseText }}{{ if $library.NoticeText }}
+
+{{ $library.NoticeText }}
+{{ end }}
 ================================================================================
 {{end}}

@@ -27,6 +27,9 @@ type Library struct {
 	LicenseName string
 	LicenseText string
 	LibraryURL  string
+
+	NoticeText string
+	NoticeURL  string
 }
 
 //go:embed resources/stdlib-license.txt
@@ -101,14 +104,25 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 
 		url, _ := goLicensesLibraryFileURL(lib, context.Background(), cl, lib.LicenseFile)
 
-		libraries = append(libraries, Library{
+		library := Library{
 			Path:  name,
 			Title: fmt.Sprintf("Module %s", name),
 
 			LicenseName: licenses[0].Name,
 			LibraryURL:  url,
 			LicenseText: string(licenseText),
-		})
+		}
+
+		if !options.SkipNotices {
+			noticeFile := filepath.Join(filepath.Dir(lib.LicenseFile), "NOTICE")
+			noticeText, err := os.ReadFile(noticeFile)
+			if err == nil && noticeFile != lib.LicenseFile {
+				library.NoticeText = string(noticeText)
+				library.NoticeURL, _ = goLicensesLibraryFileURL(lib, context.Background(), cl, noticeFile)
+			}
+		}
+
+		libraries = append(libraries, library)
 	}
 
 	// sort libraries

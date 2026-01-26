@@ -13,6 +13,9 @@ type Options struct {
 	// When set to true, ignore libraries with no license
 	SkipNoLicense bool
 
+	// When set to true, do not include notice files in output
+	SkipNotices bool
+
 	// ModulePaths are go import paths to generate license information for.
 	ModulePaths []string
 

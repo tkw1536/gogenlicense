@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 	"text/template"
-	"time"
 	"unicode"
 )
 
@@ -49,10 +48,6 @@ func generate(libraries []Library, opts Options) (string, error) {
 //go:embed resources/*.tpl
 var templateFS embed.FS
 var templates = template.Must(template.New("").Funcs(template.FuncMap{
-	"fdate": func(t time.Time, layout string) (string, error) {
-		return t.UTC().Format(layout), nil
-	},
-
 	// prefix adds a prefix to every line of a string.
 	// prefix removes trailing newlines.
 	"prefix": func(s, prefix string) (string, error) {

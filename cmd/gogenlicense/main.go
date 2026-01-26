@@ -118,6 +118,7 @@ var flagOutPackage string
 var flagDeclarationName string
 var flagModule bool
 var flagSkipNoLicense bool
+var flagSkipNotices bool
 
 func init() {
 	// HACK HACK HACK: remove glog flags by re-initializing the flagset
@@ -174,6 +175,8 @@ func init() {
 	flag.BoolVar(&flagIncludeTests, "include-tests", flagIncludeTests, "include test dependencies")
 
 	flag.BoolVar(&flagSkipNoLicense, "skip-no-license", flagSkipNoLicense, "ignore modules with no license")
+
+	flag.BoolVar(&flagSkipNotices, "skip-notices", flagSkipNotices, "do not include notice files in output")
 
 	flag.BoolVar(&flagModule, "m", flagModule, "automatically use current 'go module' path as an import path")
 	defer func() {

@@ -8,7 +8,9 @@ The list of go modules, along with their licenses, is listed below.
 {{ $library.Title | asheading }}
 
 The {{ $library.Title }} is licensed under the Terms of the {{ $library.LicenseName }} License. 
-{{if $library.LibraryURL }}See also {{$library.LibraryURL}}. {{ end }}
+{{if $library.LibraryURL }}See also {{$library.LibraryURL}}{{ if $library.NoticeURL}} and {{ $library.NoticeURL }}{{ end }}.
 
-{{ prefix $library.LicenseText " " }}
+{{ prefix $library.LicenseText " " }}{{ if $library.NoticeText }}
+{{ prefix $library.NoticeText " " }}{{ end }}
+{{ end }}
 {{end}}
