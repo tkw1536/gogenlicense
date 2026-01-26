@@ -12,8 +12,3 @@ The {{ $library.Title }} is licensed under the Terms of the {{ $library.LicenseN
 
 {{ prefix $library.LicenseText " " }}
 {{end}}
-
-Generation
-
-This variable and the associated documentation have been automatically generated using the 'gogenlicense' tool. 
-It was last updated at {{ fdate .Time "02-01-2006 15:04:05" }}. 

@@ -18,15 +18,12 @@ func generate(libraries []Library, opts Options) (string, error) {
 		Options
 
 		Libraries []Library
-		Time      time.Time
 
 		NoticeString string
 		DocString    string
 	}{
 		Libraries: libraries,
 		Options:   opts,
-
-		Time: time.Now(),
 	}
 
 	var buffer bytes.Buffer
