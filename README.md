@@ -79,6 +79,10 @@ See also the [legal subpackage](./legal/docs_notices.go) for full licenses of us
 
 ## Changelog
 
+### Version 1.8.0 (Released [Jan 26 2026](https://github.com/tkw1536/gogenlicense/releases/tag/v1.8.0))
+
+- add support for NOTICE files
+
 ### Version 1.7.0 (Released [Jan 26 2026](https://github.com/tkw1536/gogenlicense/releases/tag/v1.7.0))
 
 - remove date from generated code (for reproducibility)
