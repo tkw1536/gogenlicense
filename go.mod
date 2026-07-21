@@ -15,7 +15,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/licenseclassifier/v2 v2.0.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
-	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/tools v0.42.0 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
