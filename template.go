@@ -52,7 +52,7 @@ var templates = template.Must(template.New("").Funcs(template.FuncMap{
 	// prefix removes trailing newlines.
 	"prefix": func(s, prefix string) (string, error) {
 		buffer := &bytes.Buffer{}
-		for _, l := range strings.Split(s, "\n") {
+		for l := range strings.SplitSeq(s, "\n") {
 			buffer.WriteString(prefix)
 			buffer.WriteString(l)
 			buffer.WriteString("\n")
