@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -79,7 +80,7 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 		name := lib.Name()
 
 		// do not include the 'root' paths inside the output
-		if !options.IncludeRoots && contains(name, options.ModulePaths) {
+		if !options.IncludeRoots && slices.Contains(options.ModulePaths, name) {
 			continue
 		}
 
@@ -131,13 +132,4 @@ func find(ctx context.Context, options Options) ([]Library, error) {
 	})
 
 	return append([]Library{goStandardLibrary}, libraries...), nil
-}
-
-func contains(needle string, haystack []string) bool {
-	for _, hay := range haystack {
-		if hay == needle {
-			return true
-		}
-	}
-	return false
 }
